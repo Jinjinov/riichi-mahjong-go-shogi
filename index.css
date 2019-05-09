@@ -1,0 +1,48 @@
+body {
+    /* font-family:'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18pt;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+h2 {
+    text-align: left;
+}
+
+.behind {
+    z-index: -1;
+}
+
+.padding {
+    padding: 10px;
+}
+
+#sign-out {
+    margin: 10px;
+    padding: 10px;
+}
+
+.wikipedia {
+    padding: 10px;
+    font-size: 12pt;
+    text-align: right;
+}
+
+.game {
+    padding: 10px;
+    font-size: 14pt;
+    text-align: left;
+}
+
+#app {
+    text-align: center;
+}
+
+#inner {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+}
