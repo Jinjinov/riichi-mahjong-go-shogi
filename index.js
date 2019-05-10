@@ -11,9 +11,19 @@ var vm = new Vue({
     dateTime: null,
 
     zoom: 12,
-    center: L.latLng(46.095757,14.4663765),
+    center: L.latLng(46.054647,14.502405),
     url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-    marker: L.latLng(46.095757,14.4663765),
+    markers: 
+    [
+      L.latLng(46.054647,14.502405),
+      L.latLng(46.095757,14.466376),
+    ],
+    markerIndex: -1,
+    markerLocations:
+    [
+      "Center",
+      "Dravlje",
+    ],
 
     sitekey: '6Lf-TqIUAAAAAHjeVWtUiDsBzmw7bSuvA40rfNds',
 
@@ -39,11 +49,9 @@ var vm = new Vue({
     'vue-recaptcha': VueRecaptcha
   },
   methods: {
-    shown: function () {
-      console.log('shown')
-    },
-    hidden: function () {
-      console.log('hidden')
+    markerClick: function (index) {
+      //alert(this.markers[index]);
+      this.markerIndex = index;
     },
 
     // recaptcha:
