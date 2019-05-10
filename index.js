@@ -12,7 +12,7 @@ var vm = new Vue({
 
     zoom: 12,
     center: L.latLng(46.095757,14.4663765),
-    url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+    url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
     marker: L.latLng(46.095757,14.4663765),
 
     sitekey: '6Lf-TqIUAAAAAHjeVWtUiDsBzmw7bSuvA40rfNds',
@@ -36,8 +36,7 @@ var vm = new Vue({
     signedIn: false,
   },
   components: {
-    'vue-recaptcha': VueRecaptcha,
-    'vue-ctk-date-time-picker': window['vue-ctk-date-time-picker']
+    'vue-recaptcha': VueRecaptcha
   },
   methods: {
     shown: function () {
@@ -141,7 +140,8 @@ var vm = new Vue({
   },
   mounted () {
     this.$watch(
-      "$refs.picker.isVisible",
+      //"$refs.picker.isVisible",
+      "$refs.picker.isOpen",
       (new_value, old_value) => {
         if(old_value == false && new_value == true) {
           this.$refs.map.$el.style.zIndex = -1;

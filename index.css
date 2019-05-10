@@ -1,7 +1,7 @@
 body {
     /* font-family:'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; */
     font-family: 'Courier New', Courier, monospace;
-    font-size: 18pt;
+    font-size: 14pt;
 }
 
 * {
@@ -10,14 +10,6 @@ body {
 
 h2 {
     text-align: left;
-}
-
-.behind {
-    z-index: -1;
-}
-
-.padding {
-    padding: 10px;
 }
 
 #sign-out {
@@ -45,4 +37,9 @@ h2 {
     width: 100%;
     max-width: 720px;
     margin: 0 auto;
+}
+
+#datetime {
+    width: 100%;
+    padding: 10px;
 }
