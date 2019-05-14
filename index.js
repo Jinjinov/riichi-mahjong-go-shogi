@@ -25,7 +25,7 @@ var vm = new Vue({
       "Dravlje",
     ],
 
-    sitekey: '6Lf-TqIUAAAAAHjeVWtUiDsBzmw7bSuvA40rfNds',
+    sitekey: '6LdXgqMUAAAAAOSLkNGWDN_jrd1EfGGVQTeVYwMU',
 
     checkedGames: [],
 

@@ -1,4 +1,6 @@
 <?php
+    require 'reCAPTCHA.php';
+    
     $captcha;
 
     if(isset($_POST['g-recaptcha-response']))
@@ -11,7 +13,7 @@
 
     /*
     $url = 'https://www.google.com/recaptcha/api/siteverify';
-    $data = ['secret'   => '6Lf-TqIUAAAAAOHP2O7EgvnPrW9RBMvEnawOQhBd',
+    $data = ['secret'   => $reCAPTCHA,
              'response' => $_POST['g-recaptcha-response'],
              'remoteip' => $_SERVER['REMOTE_ADDR']];
 
@@ -28,7 +30,7 @@
     $response = json_decode($result);
     /**/
 
-    $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6Lf-TqIUAAAAAOHP2O7EgvnPrW9RBMvEnawOQhBd&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']), true);
+    $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$reCAPTCHA."&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']), true);
     
     if($response['success'] == false)
     {
