@@ -133,13 +133,19 @@
           <datetime ref="picker" type="datetime" v-model="dateTime" input-id="datetime" ></datetime>
         </div>
 
-        <h2>3.) Pick a location:<span v-if="markerIndex != -1"> {{markerLocations[markerIndex]}}</span></h2>
+        <h2>3.) Pick a location:<span v-if="locationIndex != -1"> {{locations[locationIndex].address}}</span></h2>
+
+        <select v-model="locationIndex" id="location">
+          <option v-for="(location, index) in locations" v-bind:value="index">{{ location.address }}</option>
+        </select>
 
         <template>
           <l-map :zoom="zoom" :center="center" style="height: 500px;" ref="map">
             <l-tile-layer :url="url"></l-tile-layer>
-            <template v-for="(marker, index) in markers">
-              <l-marker :lat-lng="marker" v-on:click="markerClick(index)"></l-marker>
+            <template v-for="(location, index) in locations">
+              <l-marker :lat-lng="location.marker" v-on:click="markerClick(index)" :icon="location.icon">
+                <v-popup :content="location.address"></v-popup>
+              </l-marker>
             </template>
           </l-map>
         </template>

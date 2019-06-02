@@ -13,16 +13,29 @@ var vm = new Vue({
     zoom: 12,
     center: L.latLng(46.054647,14.502405),
     url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-    markers: 
+
+    defaultIcon: L.icon({
+      iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+      shadowUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    }),
+    selectedIcon: L.icon({
+      iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+      shadowUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    }),
+
+    locationIndex: -1,
+    locations:
     [
-      L.latLng(46.054647,14.502405),
-      L.latLng(46.095757,14.466376),
-    ],
-    markerIndex: -1,
-    markerLocations:
-    [
-      "Center",
-      "Dravlje",
+      { address: "Center", marker: L.latLng(46.054647,14.502405) },
+      { address: "Dravlje", marker: L.latLng(46.095757,14.466376) }
     ],
 
     sitekey: '6LdXgqMUAAAAAOSLkNGWDN_jrd1EfGGVQTeVYwMU',
@@ -48,10 +61,21 @@ var vm = new Vue({
   components: {
     'vue-recaptcha': VueRecaptcha
   },
+  watch: {
+    locationIndex: function (newLocation, oldLocation) {
+      if(oldLocation != -1) {
+        this.locations[oldLocation].icon = this.defaultIcon;
+      }
+      this.locations[newLocation].icon = this.selectedIcon;
+    }
+  },
   methods: {
     markerClick: function (index) {
-      //alert(this.markers[index]);
-      this.markerIndex = index;
+      //if(this.locationIndex != -1) {
+      //  this.locations[this.locationIndex].icon = this.defaultIcon;
+      //}
+      this.locationIndex = index;
+      //this.locations[this.locationIndex].icon = this.selectedIcon;
     },
 
     // recaptcha:
