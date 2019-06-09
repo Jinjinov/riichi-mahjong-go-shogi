@@ -11,7 +11,7 @@ var vm = new Vue({
     dateTime: null,
 
     zoom: 12,
-    center: L.latLng(46.054647,14.502405),
+    center: L.latLng(46.0712603, 14.5109068),
     url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
 
     defaultIcon: L.icon({
@@ -34,9 +34,10 @@ var vm = new Vue({
     locationIndex: -1,
     locations:
     [
-      { address: "Center", marker: L.latLng(46.054647,14.502405) },
-      { address: "Dravlje", marker: L.latLng(46.095757,14.466376) }
+      //{ address: "Center", marker: L.latLng(46.054647,14.502405) },
+      //{ address: "Dravlje", marker: L.latLng(46.095757,14.466376) }
     ],
+    ids: {},
 
     sitekey: '6LdXgqMUAAAAAOSLkNGWDN_jrd1EfGGVQTeVYwMU',
 
@@ -169,8 +170,62 @@ var vm = new Vue({
     onFacebookSignInError: function(error) {
       console.log('OH NOES', error);
     },
+    toOverpassBBoxString: function(bounds) {
+      var a = bounds._southWest;
+      var b = bounds._northEast;
+      return [a.lat, a.lng, b.lat, b.lng].join(',');
+    },
+    buildOverpassApiUrl: function (bounds, overpassQuery) {
+      var bbox = bounds.getSouth() + ',' + bounds.getWest() + ',' + bounds.getNorth() + ',' + bounds.getEast();
+      var nodeQuery = 'node[' + overpassQuery + '](' + bbox + ');';
+      var wayQuery = 'way[' + overpassQuery + '](' + bbox + ');';
+      var relationQuery = 'relation[' + overpassQuery + '](' + bbox + ');';
+      var query = '?data=[out:json][timeout:15];(' + nodeQuery + wayQuery + relationQuery + ');out center;';
+      var baseUrl = 'http://overpass-api.de/api/interpreter';
+      var resultUrl = baseUrl + query;
+      return resultUrl;
+    }
   },
   mounted () {
+    // http://overpass-api.de/api/interpreter/?data=(node[amenity=restaurant](bbox);way[amenity=restaurant](bbox);rel[amenity=restaurant](bbox););(._;%3E;);out%20center;&bbox=14.427296157835,46.020814448889,14.536129470825,46.139649267349
+    var poiUrl = '//overpass-api.de/api/interpreter?data=[out:json];node(BBOX)[amenity~"restaurant"];out;'.replace(
+          /(BBOX)/g,
+          this.toOverpassBBoxString(this.$refs.map.mapObject.getBounds())
+        );
+    poiUrl = this.buildOverpassApiUrl(this.$refs.map.mapObject.getBounds(), "amenity~'bar|cafe|pub|restaurant'");
+    this.$http.get(poiUrl).then(
+      function(response) {
+        for(var i = 0; i < response.body.elements.length; ++i) {
+          var element = response.body.elements[i];
+          if (!(element.id in this.ids)) {
+            this.ids[element.id] = true;
+
+            var name = "";
+            if(element.tags.name) {
+              name = element.tags.name;
+            }
+            else if(element.tags.amenity) {
+              name = element.tags.amenity;
+            }
+
+            if(element.lat != null && element.lon != null) {
+              var locationNode = { address: name, marker: L.latLng(element.lat, element.lon) }
+              this.locations.push(locationNode);
+            }
+            else {
+              if(element.center.lat != null && element.center.lon != null) {
+                var locationWay = { address: name, marker: L.latLng(element.center.lat, element.center.lon) }
+                this.locations.push(locationWay);
+              }
+            }
+            
+          }
+        }
+      },
+      function(response) {
+        console.log(response);
+      }
+    );
     this.$watch(
       //"$refs.picker.isVisible",
       "$refs.picker.isOpen",
