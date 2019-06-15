@@ -181,7 +181,7 @@ var vm = new Vue({
       var wayQuery = 'way[' + overpassQuery + '](' + bbox + ');';
       var relationQuery = 'relation[' + overpassQuery + '](' + bbox + ');';
       var query = '?data=[out:json][timeout:15];(' + nodeQuery + wayQuery + relationQuery + ');out center;';
-      var baseUrl = 'http://overpass-api.de/api/interpreter';
+      var baseUrl = 'https://overpass-api.de/api/interpreter';
       var resultUrl = baseUrl + query;
       return resultUrl;
     }

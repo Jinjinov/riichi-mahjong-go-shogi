@@ -16,7 +16,7 @@ $adapters = $hybridauth->getConnectedAdapters();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Example 06</title>
+    <title>Login</title>
 </head>
 <body>
 <h1>Sign in</h1>
