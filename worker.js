@@ -11,10 +11,10 @@ var urlstocache = [
   'https://use.fontawesome.com/releases/v5.8.1/css/all.css',
   //'https://cdn.jsdelivr.net/npm/vue-ctk-date-time-picker@1.4.1/dist/vue-ctk-date-time-picker.css',
   //'https://cdn.jsdelivr.net/npm/vue-ctk-date-time-picker@1.4.1/dist/vue-ctk-date-time-picker.umd.min.js',
-  "https://unpkg.com/vue-datetime@1.0.0-beta.8/dist/vue-datetime.min.css",
+  "https://cdn.jsdelivr.net/npm/vue-datetime@1.0.0-beta.10/dist/vue-datetime.min.css",
   "https://cdn.jsdelivr.net/npm/luxon@1.13.2/build/global/luxon.min.js",
   "https://cdn.jsdelivr.net/npm/weekstart@1.0.0/dist/commonjs/main.min.js",
-  "https://unpkg.com/vue-datetime@1.0.0-beta.8/dist/vue-datetime.min.js",
+  "https://cdn.jsdelivr.net/npm/vue-datetime@1.0.0-beta.10/dist/vue-datetime.min.js",
 ];
 
 // install/cache page assets
