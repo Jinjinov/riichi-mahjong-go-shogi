@@ -192,7 +192,9 @@ var vm = new Vue({
           /(BBOX)/g,
           this.toOverpassBBoxString(this.$refs.map.mapObject.getBounds())
         );
+
     poiUrl = this.buildOverpassApiUrl(this.$refs.map.mapObject.getBounds(), "amenity~'bar|cafe|pub|restaurant'");
+    
     this.$http.get(poiUrl).then(
       function(response) {
         for(var i = 0; i < response.body.elements.length; ++i) {
@@ -218,7 +220,6 @@ var vm = new Vue({
                 this.locations.push(locationWay);
               }
             }
-            
           }
         }
       },

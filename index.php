@@ -1,9 +1,110 @@
 <?php
 include 'Hybridauth/autoload.php';
 include 'config.php';
+
 use Hybridauth\Hybridauth;
+
 $hybridauth = new Hybridauth($config);
 $adapters = $hybridauth->getConnectedAdapters();
+
+//function buildOverpassApiUrl($bounds, $overpassQuery)
+function buildOverpassApiUrl($overpassQuery)
+{
+  //$bbox = $bounds->getSouth() + ',' + $bounds->getWest() + ',' + $bounds->getNorth() + ',' + $bounds->getEast();
+  $bbox = "46.01174695991618,14.387283325195314,46.130839162824444,14.634475708007814";
+
+  $nodeQuery = 'node[' . $overpassQuery . '](' . $bbox . ');';
+  $wayQuery = 'way[' . $overpassQuery . '](' . $bbox . ');';
+  $relationQuery = 'relation[' . $overpassQuery . '](' . $bbox . ');';
+  $query = '?data=[out:json][timeout:15];(' . $nodeQuery . $wayQuery . $relationQuery . ');out center;';
+  $baseUrl = 'https://overpass-api.de/api/interpreter';
+  $resultUrl = $baseUrl . $query;
+
+  return $resultUrl;
+}
+
+function getLocations()
+{
+  // http://overpass-api.de/api/interpreter/?data=(node[amenity=restaurant](bbox);way[amenity=restaurant](bbox);rel[amenity=restaurant](bbox););(._;%3E;);out%20center;&bbox=14.427296157835,46.020814448889,14.536129470825,46.139649267349
+
+  //$poiUrl = buildOverpassApiUrl($refs->map->mapObject->getBounds(), "amenity~'bar|cafe|pub|restaurant'");
+  $poiUrl = buildOverpassApiUrl("amenity~'bar|cafe|pub|restaurant'");
+
+  $poiUrl = str_replace(" ", "%20", $poiUrl);
+
+  $html = file_get_contents($poiUrl);
+
+  $result = json_decode($html);
+  $elements = $result->elements;
+  
+  $ids = [];
+  $locations = [];
+
+  foreach($elements as $element)
+  {
+    if (!array_key_exists($element->id, $ids))
+    {
+      $ids[$element->id] = new stdClass();
+
+      $name = "";
+      if(property_exists($element->tags, "name"))
+      {
+        $name = $element->tags->name;
+      }
+      else if(property_exists($element->tags, "amenity"))
+      {
+        $name = $element->tags->amenity;
+      }
+
+      if(property_exists($element, "lat") && property_exists($element, "lon"))
+      {
+        $locationNode = [ "address" => $name, "marker" => [$element->lat, $element->lon] ];
+        array_push($locations, $locationNode);
+        $ids[$element->id] = $locationNode;
+      }
+      else if(property_exists($element, "center") && property_exists($element->center, "lat") && property_exists($element->center, "lon"))
+      {
+        $locationWay = [ "address" => $name, "marker" => [$element->center->lat, $element->center->lon] ];
+        array_push($locations, $locationWay);
+        $ids[$element->id] = $locationWay;        
+      }
+    }
+  }
+
+  $_SESSION['ids'] = $ids;
+  $_SESSION['locations'] = $locations;
+}
+
+if (!isset($_SESSION['initialized']))
+{
+  $_SESSION['initialized'] = true;
+
+  getLocations();
+}
+
+  /*
+  // How to send a GET request from PHP?
+  $xml = file_get_contents("http://www.example.com/file.xml");
+
+  // How do I send a POST request with PHP?
+  $url = 'http://server.com/path';
+  $data = array('key1' => 'value1', 'key2' => 'value2');
+  // use key 'http' even if you send the request to https://...
+  $options = array(
+      'http' => array(
+          'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+          'method'  => 'POST',
+          'content' => http_build_query($data)
+      )
+  );
+  $context  = stream_context_create($options);
+  $result = file_get_contents($url, false, $context);
+  if ($result === FALSE) {
+    // Handle error
+  }
+  var_dump($result);
+  /**/
+
 ?>
 
 <!DOCTYPE html>
