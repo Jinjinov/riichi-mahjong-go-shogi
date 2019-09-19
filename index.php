@@ -81,6 +81,32 @@ if (!isset($_SESSION['initialized']))
 
   getLocations();
 }
+else if (isset($_POST["game"]) && isset($_POST["time"]) && isset($_POST["location"]) && isset($_POST["username"]) && isset($_POST["email"]))
+{
+    $game = $_POST["game"];
+    $time = $_POST["time"];
+    $id = $_POST["location"];
+    $username = $_POST["username"];
+    $email = $_POST["email"];
+
+    $ids = $_SESSION['ids'];
+    $locations = $_SESSION['locations'];
+
+    if(array_key_exists($id, $ids))
+    {
+        $location = $ids[$id];
+
+        if (($timestamp = strtotime($time)) !== false)
+        {
+            if (($dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $time)) !== FALSE)
+            {
+                echo $game;
+                echo $username;
+                echo $email;
+            }
+        }
+    }
+}
 
   /*
   // How to send a GET request from PHP?
@@ -213,10 +239,12 @@ if (!isset($_SESSION['initialized']))
         <div class="wikipedia">Play <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Go_(game)">Go</a> in <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Ljubljana">Ljubljana, Slovenia</a></div>
         <div class="wikipedia">Play <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Shogi">Shogi</a> in <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Ljubljana">Ljubljana, Slovenia</a></div>
 
+        <h2>1.) Sign in:</h2>
+
         <div style="font-size: 12pt;">
         <?php foreach ($hybridauth->getProviders() as $name) : ?>
             <?php if (!isset($adapters[$name])) : ?>
-                <p>
+                <p class="<?php print $name ?>">
                     <a href="<?php print $config['callback'] . "?provider={$name}"; ?>">
                         Sign in with <strong><?php print $name; ?></strong>
                     </a>
@@ -236,7 +264,7 @@ if (!isset($_SESSION['initialized']))
         <?php endif; ?>
         </div>
 
-        <h2>1.) Select a game:</h2>
+        <h2>2.) Select a game:</h2>
 
         <div class="game">I want to play:</div>
         <div class="game">
@@ -257,7 +285,7 @@ if (!isset($_SESSION['initialized']))
           <span v-for="game in checkedGames"> {{game}}</span>
         </div>
 -->
-        <h2>2.) Pick a date:</h2>
+        <h2>3.) Pick a date:</h2>
 
         <div>
           <!--
@@ -266,7 +294,7 @@ if (!isset($_SESSION['initialized']))
           <datetime ref="picker" type="datetime" v-model="dateTime" input-id="datetime" ></datetime>
         </div>
 
-        <h2>3.) Pick a location:<span v-if="locationIndex != -1"> {{locations[locationIndex].address}}</span></h2>
+        <h2>4.) Pick a location:<span v-if="locationIndex != -1"> {{locations[locationIndex].address}}</span></h2>
 
         <select v-model="locationIndex" id="location">
           <option v-for="(location, index) in locations" v-bind:value="index">{{ location.address }}</option>
@@ -283,6 +311,7 @@ if (!isset($_SESSION['initialized']))
           </l-map>
         </template>
 
+        <!--
         <h2>4.) Sign in:</h2>
 
         <div v-if="!signedIn">
@@ -306,6 +335,7 @@ if (!isset($_SESSION['initialized']))
           </template>
         </div>
         <button v-if="signedIn" id="sign-out" v-on:click="signOut()">Sign out: {{userName}}</button>
+        -->
 
         <h2>5.) Confirm:</h2>
 

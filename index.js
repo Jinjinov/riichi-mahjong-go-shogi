@@ -91,6 +91,12 @@ var vm = new Vue({
 
       postParam['g-recaptcha-response'] = response;
 
+      postParam['game'] = this.checkedGames;
+      postParam['time'] = this.dateTime;
+      postParam['location'] = this.locationIndex;
+      postParam['username'] = this.userName;
+      postParam['email'] = this.userEmail;
+
       this.$http.post('verify.php', postParam, {emulateJSON: true}).then(
         function(response) {
           if(response.body.success == true) {

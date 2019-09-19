@@ -6,8 +6,9 @@
     if(isset($_POST['g-recaptcha-response']))
         $captcha=$_POST['g-recaptcha-response'];
 
-    if(!$captcha){
-        echo '<h2>Please check the the captcha form.</h2>';
+    if(!$captcha)
+    {
+        //echo '<h2>Please check the the captcha form.</h2>';
         exit;
     }
 
@@ -34,10 +35,37 @@
     
     if($response['success'] == false)
     {
-        echo json_encode(array("success"=>false, "message"=>"bye!"));
+        //echo json_encode(array("success"=>false, "message"=>"bye!"));
     }
-    else
+    else if (isset($_SESSION['initialized']))
     {
-        echo json_encode(array("success"=>true, "message"=>"hello"));
+        //echo json_encode(array("success"=>true, "message"=>"hello"));
+
+        if (isset($_POST["game"]) && isset($_POST["time"]) && isset($_POST["location"]) && isset($_POST["username"]) && isset($_POST["email"]))
+        {
+            $game = $_POST["game"];
+            $time = $_POST["time"];
+            $id = $_POST["location"];
+            $username = $_POST["username"];
+            $email = $_POST["email"];
+
+            $ids = $_SESSION['ids'];
+            $locations = $_SESSION['locations'];
+
+            if(array_key_exists($id, $ids))
+            {
+                $location = $ids[$id];
+
+                if (($timestamp = strtotime($time)) !== false)
+                {
+                    if (($dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $time)) !== FALSE)
+                    {
+                        echo $game;
+                        echo $username;
+                        echo $email;
+                    }
+                }
+            }
+        }
     }
 ?>
