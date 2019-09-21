@@ -1,7 +1,13 @@
 <?php
     session_start();
 
+    include 'Hybridauth/autoload.php';
     include 'config.php';
+
+    use Hybridauth\Hybridauth;
+
+    $hybridauth = new Hybridauth($config);
+    $adapters = $hybridauth->getConnectedAdapters();
 
     require 'reCAPTCHA.php';
     
@@ -50,7 +56,19 @@
             //$id = $_POST["location"];
             $index = $_POST["location"];
             $username = $_POST["username"];
-            $email = $_POST["email"];
+            $emailFrom = $_POST["email"];
+
+            if($adapters)
+            {
+                foreach ($adapters as $name => $adapter)
+                {
+                    if($adapter->isConnected())
+                    {
+                        $username = $adapter->getUserProfile()->displayName;
+                        $emailFrom = $adapter->getUserProfile()->email;
+                    }
+                }
+            }
 
             //$ids = $_SESSION['ids'];
             $locations = $_SESSION['locations'];
@@ -63,22 +81,29 @@
 
                 if (($timestamp = strtotime($time)) !== false)
                 {
-                    if (($dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $time)) !== FALSE)
-                    {
-                        $message = "Game: $game \n User: $username \n Email: $email \n Location: $location \n Time: $timestamp \n Date: $dateTime";
+                    //if (($dateTime = new DateTime($time)) !== FALSE)
+                    //{
+                        $message = "Game: ". json_encode($game) ." \n User: $username \n Email: $emailFrom \n Location: ". json_encode($location) ." \n Time: $timestamp \n Date: $dateTime $time";
 
-                        mail($email, "Reservation", $message);
+                        $headers = "From: $emailFrom" . "\r\n" . "Reply-To: $emailFrom" . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
-                        echo json_encode(array("success" => true, "message" => $message));
-                    }
-                    else
-                    {
-                        echo json_encode(array("success"=>true, "message"=>"invalid date"));
-                    }
+                        if (mail($emailTo, "Reservation", $message /*, $headers,"-f $emailFrom" */) !== false)
+                        {
+                            echo json_encode(array("success" => true, "message" => $message));
+                        }
+                        else
+                        {
+                            echo json_encode(array("success"=>true, "message"=>"mail not sent $message"));
+                        }
+                    //}
+                    //else
+                    //{
+                    //    echo json_encode(array("success"=>true, "message"=>"invalid date $time timestamp $timestamp "));
+                    //}
                 }
                 else
                 {
-                    echo json_encode(array("success"=>true, "message"=>"invalid time"));
+                    echo json_encode(array("success"=>true, "message"=>"invalid time $time"));
                 }
             }
             else

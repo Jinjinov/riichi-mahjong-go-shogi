@@ -77,6 +77,7 @@ function getLocations()
 
 function initialize()
 {
+  /*
   if (isset($_SESSION['initialized']))
   {
     echo 'alert("initialized"); ';
@@ -90,7 +91,9 @@ function initialize()
       echo "alert('Locations: $msg !'); ";
     }
   }
-  else if (!isset($_SESSION['initialized']))
+  else
+  /**/
+  if (!isset($_SESSION['initialized']))
   {
     $_SESSION['initialized'] = true;
 
@@ -118,7 +121,7 @@ function initialize()
 
           if (($timestamp = strtotime($time)) !== false)
           {
-              if (($dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $time)) !== FALSE)
+              if (($dateTime = DateTime::createFromFormat(DateTime::ATOM, $time)) !== FALSE)
               {
                 $message = "Game: $game \n User: $username \n Email: $email \n Location: $location \n Time: $timestamp \n Date: $dateTime";
 
