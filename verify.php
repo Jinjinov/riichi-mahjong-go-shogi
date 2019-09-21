@@ -85,42 +85,44 @@
                     {
                         $dateTime->setTimezone(new DateTimeZone('Europe/Ljubljana'));
 
-                        $message = "Game: ". json_encode($game) ." \n User: $username \n Email: $emailFrom \n Location: ". json_encode($location) ." \n Time: $timestamp \n UTC Date: $time \n Date: " . $dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)");
+                        $subject = "Reservation ".$dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)");
+
+                        //$message = "Game: ". json_encode($game) ." \n User: $username \n Email: $emailFrom \n Location: ". json_encode($location) ." \n Unix timestamp: $timestamp \n UTC Date: $time \n Date: " . $dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)");
+                        $message = "User: $username"."\n"."Email: $emailFrom"."\n"."Game: ".json_encode($game)."\n"."Date: ".$dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)")."\n"."Location: ".json_encode($location);
 
                         $headers = "From: $emailFrom" . "\r\n" . "Reply-To: $emailFrom" . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
-                        if (mail($emailTo, "Reservation", $message /*, $headers,"-f $emailFrom" */) !== false)
+                        if (mail($emailTo, $subject, $message /*, $headers,"-f $emailFrom" */) !== false)
                         {
-                            echo json_encode(array("success" => true, "message" => $message));
+                            echo json_encode(array("success"=>true, "message"=>$message));
                         }
                         else
                         {
-                            echo json_encode(array("success"=>true, "message"=>"mail not sent $message"));
+                            echo json_encode(array("success"=>false, "message"=>"mail not sent $message"));
                         }
                     }
                     else
                     {
-                        echo json_encode(array("success"=>true, "message"=>"invalid date $time timestamp $timestamp "));
+                        echo json_encode(array("success"=>false, "message"=>"invalid date $time timestamp $timestamp "));
                     }
                 }
                 else
                 {
-                    echo json_encode(array("success"=>true, "message"=>"invalid time $time"));
+                    echo json_encode(array("success"=>false, "message"=>"invalid time $time"));
                 }
             }
             else
             {
-                $msg = json_encode($ids);
-                echo json_encode(array("success"=>true, "message"=>"location $id not found in $msg"));
+                echo json_encode(array("success"=>false, "message"=>"location $id not found"));
             }
         }
         else
         {
-            echo json_encode(array("success"=>true, "message"=>"initialized"));
+            echo json_encode(array("success"=>false, "message"=>"initialized"));
         }
     }
     else
     {
-        echo json_encode(array("success"=>true, "message"=>"verification successful"));
+        echo json_encode(array("success"=>false, "message"=>"verification successful"));
     }
 ?>

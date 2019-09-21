@@ -80,7 +80,7 @@ function initialize()
   /*
   if (isset($_SESSION['initialized']))
   {
-    echo 'alert("initialized"); ';
+    echo 'alert("already initialized"); ';
 
     if (isset($_SESSION['locations']))
     {
@@ -99,7 +99,7 @@ function initialize()
 
     getLocations();
 
-    echo 'alert("initialized")';
+    //echo 'alert("initialized")';
   }
   else if (isset($_POST["game"]) && isset($_POST["time"]) && isset($_POST["location"]) && isset($_POST["username"]) && isset($_POST["email"]))
   {
@@ -272,15 +272,6 @@ function initialize()
         <h2>1.) Sign in:</h2>
 
         <div style="font-size: 12pt;">
-        <?php foreach ($hybridauth->getProviders() as $name) : ?>
-            <?php if (!isset($adapters[$name])) : ?>
-                <p class="<?php print $name ?>">
-                    <a href="<?php print $config['callback'] . "?provider={$name}"; ?>">
-                        Sign in with <strong><?php print $name; ?></strong>
-                    </a>
-                </p>
-            <?php endif; ?>
-        <?php endforeach; ?>
 
         <?php if ($adapters) : ?>
             <?php foreach ($adapters as $name => $adapter) : ?>
@@ -291,6 +282,15 @@ function initialize()
                     <span>(<a href="<?php print $config['callback'] . "?logout={$name}"; ?>">Log Out</a>)</span>
                 </p>
             <?php endforeach; ?>
+        <?php else: ?>
+          <?php foreach ($hybridauth->getProviders() as $name) : ?>
+              <?php if (!isset($adapters[$name])) : ?>
+                  <a class="<?php print $name ?>" href="<?php print $config['callback'] . "?provider={$name}"; ?>">
+                      <i class="<?php print $config['providers'][$name]['icon']; ?>"></i>
+                      Sign in with <strong><?php print $name; ?></strong>
+                  </a>
+              <?php endif; ?>
+          <?php endforeach; ?>
         <?php endif; ?>
         </div>
 
@@ -324,7 +324,7 @@ function initialize()
           <datetime ref="picker" type="datetime" v-model="dateTime" input-id="datetime" ></datetime>
         </div>
 
-        <h2>4.) Pick a location:<span v-if="locationIndex != -1"> {{locations[locationIndex].address}}</span></h2>
+        <h2>4.) Pick a location:</h2>
 
         <select v-model="locationIndex" id="location">
           <option v-for="(location, index) in locations" v-bind:value="index">{{ location.address }}</option>
@@ -369,13 +369,28 @@ function initialize()
 
         <h2>5.) Confirm:</h2>
 
-        <vue-recaptcha
-          style="display: inline-block; padding: 10px"
-          ref="recaptcha"
-          @verify="onVerify"
-          @expired="onExpired"
-          :sitekey="sitekey">
-        </vue-recaptcha>
+        <?php if ($adapters) : ?>
+          <vue-recaptcha
+            v-if="checkedGames.length != 0 && dateTime != '' && locationIndex != -1"
+            style="display: inline-block; padding: 10px"
+            ref="recaptcha"
+            @verify="onVerify"
+            @expired="onExpired"
+            :sitekey="sitekey">
+          </vue-recaptcha>
+        <?php else: ?>
+          <p>You have to sign in!</p>
+        <?php endif; ?>
+
+        <p v-if="checkedGames.length == 0">You have to choose a game!</p>
+        <p v-if="checkedGames.length != 0">Games: {{checkedGames}}</p>
+
+        <p v-if="dateTime == ''">You have to choose a date!</p>
+        <p v-if="dateTime != ''">Date: {{dateTime}}</p>
+
+        <p v-if="locationIndex == -1">You have to choose a location!</p>
+        <p v-if="locationIndex != -1">Location: {{locations[locationIndex].address}}</p>
+
         <!--
         <br>
         <button @click="resetRecaptcha"> Reset ReCAPTCHA </button>
