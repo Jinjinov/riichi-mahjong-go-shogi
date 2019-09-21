@@ -121,9 +121,9 @@ function initialize()
 
           if (($timestamp = strtotime($time)) !== false)
           {
-              if (($dateTime = DateTime::createFromFormat(DateTime::ATOM, $time)) !== FALSE)
+              if (($dateTime = DateTime::createFromFormat("Y-m-d\TH:i:s.uP", $time)) !== FALSE)
               {
-                $message = "Game: $game \n User: $username \n Email: $email \n Location: $location \n Time: $timestamp \n Date: $dateTime";
+                $message = "Game: $game \n User: $username \n Email: $email \n Location: $location \n Time: $timestamp \n Date: $time " . $dateTime->format("Y-m-d H:i:s");
 
                 mail($email, "Reservation", $message);
 

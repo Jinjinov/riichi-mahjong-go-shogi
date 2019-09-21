@@ -81,9 +81,11 @@
 
                 if (($timestamp = strtotime($time)) !== false)
                 {
-                    //if (($dateTime = new DateTime($time)) !== FALSE)
-                    //{
-                        $message = "Game: ". json_encode($game) ." \n User: $username \n Email: $emailFrom \n Location: ". json_encode($location) ." \n Time: $timestamp \n Date: $dateTime $time";
+                    if (($dateTime = DateTime::createFromFormat("Y-m-d\TH:i:s.uP", $time)) !== FALSE)
+                    {
+                        $dateTime->setTimezone(new DateTimeZone('Europe/Ljubljana'));
+
+                        $message = "Game: ". json_encode($game) ." \n User: $username \n Email: $emailFrom \n Location: ". json_encode($location) ." \n Time: $timestamp \n UTC Date: $time \n Date: " . $dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)");
 
                         $headers = "From: $emailFrom" . "\r\n" . "Reply-To: $emailFrom" . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
@@ -95,11 +97,11 @@
                         {
                             echo json_encode(array("success"=>true, "message"=>"mail not sent $message"));
                         }
-                    //}
-                    //else
-                    //{
-                    //    echo json_encode(array("success"=>true, "message"=>"invalid date $time timestamp $timestamp "));
-                    //}
+                    }
+                    else
+                    {
+                        echo json_encode(array("success"=>true, "message"=>"invalid date $time timestamp $timestamp "));
+                    }
                 }
                 else
                 {
