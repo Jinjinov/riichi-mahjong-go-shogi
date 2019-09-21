@@ -1,4 +1,5 @@
 <?php
+    session_start();
 
     include 'config.php';
 
@@ -46,16 +47,19 @@
         {
             $game = $_POST["game"];
             $time = $_POST["time"];
-            $id = $_POST["location"];
+            //$id = $_POST["location"];
+            $index = $_POST["location"];
             $username = $_POST["username"];
             $email = $_POST["email"];
 
-            $ids = $_SESSION['ids'];
+            //$ids = $_SESSION['ids'];
             $locations = $_SESSION['locations'];
 
-            if(array_key_exists($id, $ids))
+            //if(array_key_exists($id, $ids))
+            if(array_key_exists($index, $locations))
             {
-                $location = $ids[$id];
+                //$location = $ids[$id];
+                $location = $locations[$index];
 
                 if (($timestamp = strtotime($time)) !== false)
                 {
@@ -79,12 +83,17 @@
             }
             else
             {
-                echo json_encode(array("success"=>true, "message"=>"location not found"));
+                $msg = json_encode($ids);
+                echo json_encode(array("success"=>true, "message"=>"location $id not found in $msg"));
             }
         }
         else
         {
-            echo json_encode(array("success"=>true, "message"=>"verification successful"));
+            echo json_encode(array("success"=>true, "message"=>"initialized"));
         }
+    }
+    else
+    {
+        echo json_encode(array("success"=>true, "message"=>"verification successful"));
     }
 ?>

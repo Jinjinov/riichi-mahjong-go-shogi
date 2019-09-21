@@ -75,46 +75,60 @@ function getLocations()
   $_SESSION['locations'] = $locations;
 }
 
-if (!isset($_SESSION['initialized']))
+function initialize()
 {
-  $_SESSION['initialized'] = true;
+  if (isset($_SESSION['initialized']))
+  {
+    echo 'alert("initialized"); ';
 
-  getLocations();
-}
-else if (isset($_POST["game"]) && isset($_POST["time"]) && isset($_POST["location"]) && isset($_POST["username"]) && isset($_POST["email"]))
-{
-    $game = $_POST["game"];
-    $time = $_POST["time"];
-    $id = $_POST["location"];
-    $username = $_POST["username"];
-    $email = $_POST["email"];
-
-    $ids = $_SESSION['ids'];
-    $locations = $_SESSION['locations'];
-
-    if(array_key_exists($id, $ids))
+    if (isset($_SESSION['locations']))
     {
-        $location = $ids[$id];
+      $ids = $_SESSION['ids'];
+      $locations = $_SESSION['locations'];
+      $msg = count($locations);
 
-        if (($timestamp = strtotime($time)) !== false)
-        {
-            if (($dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $time)) !== FALSE)
-            {
-                /*
-
-                !!! Can't echo before <html lang="en"> !!!
-
-                echo "index.php";
-                echo $game;
-                echo $username;
-                echo $email;
-                echo $location;
-                echo $timestamp;
-                echo $dateTime;
-                /**/
-            }
-        }
+      echo "alert('Locations: $msg !'); ";
     }
+  }
+  else if (!isset($_SESSION['initialized']))
+  {
+    $_SESSION['initialized'] = true;
+
+    getLocations();
+
+    echo 'alert("initialized")';
+  }
+  else if (isset($_POST["game"]) && isset($_POST["time"]) && isset($_POST["location"]) && isset($_POST["username"]) && isset($_POST["email"]))
+  {
+      $game = $_POST["game"];
+      $time = $_POST["time"];
+      //$id = $_POST["location"];
+      $index = $_POST["location"];
+      $username = $_POST["username"];
+      $email = $_POST["email"];
+
+      //$ids = $_SESSION['ids'];
+      $locations = $_SESSION['locations'];
+
+      //if(array_key_exists($id, $ids))
+      if(array_key_exists($index, $locations))
+      {
+          //$location = $ids[$id];
+          $location = $locations[$index];
+
+          if (($timestamp = strtotime($time)) !== false)
+          {
+              if (($dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $time)) !== FALSE)
+              {
+                $message = "Game: $game \n User: $username \n Email: $email \n Location: $location \n Time: $timestamp \n Date: $dateTime";
+
+                mail($email, "Reservation", $message);
+
+                echo "alert(' $message ')";
+              }
+          }
+      }
+  }
 }
 
   /*
@@ -205,6 +219,10 @@ else if (isset($_POST["game"]) && isset($_POST["time"]) && isset($_POST["locatio
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WZDBQRG"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+
+    <script>
+      <?php initialize(); ?>
+    </script>
 
     <style>
       .g-signin-button {
