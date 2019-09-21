@@ -1,4 +1,7 @@
 <?php
+
+    include 'config.php';
+
     require 'reCAPTCHA.php';
     
     $captcha;
@@ -8,7 +11,7 @@
 
     if(!$captcha)
     {
-        //echo '<h2>Please check the the captcha form.</h2>';
+        echo 'Please check the the captcha form.';
         exit;
     }
 
@@ -35,12 +38,10 @@
     
     if($response['success'] == false)
     {
-        //echo json_encode(array("success"=>false, "message"=>"bye!"));
+        echo json_encode(array("success"=>false, "message"=>"verification failed"));
     }
     else if (isset($_SESSION['initialized']))
     {
-        //echo json_encode(array("success"=>true, "message"=>"hello"));
-
         if (isset($_POST["game"]) && isset($_POST["time"]) && isset($_POST["location"]) && isset($_POST["username"]) && isset($_POST["email"]))
         {
             $game = $_POST["game"];
@@ -60,12 +61,30 @@
                 {
                     if (($dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $time)) !== FALSE)
                     {
-                        echo $game;
-                        echo $username;
-                        echo $email;
+                        $message = "Game: $game \n User: $username \n Email: $email \n Location: $location \n Time: $timestamp \n Date: $dateTime";
+
+                        mail($email, "Reservation", $message);
+
+                        echo json_encode(array("success" => true, "message" => $message));
+                    }
+                    else
+                    {
+                        echo json_encode(array("success"=>true, "message"=>"invalid date"));
                     }
                 }
+                else
+                {
+                    echo json_encode(array("success"=>true, "message"=>"invalid time"));
+                }
             }
+            else
+            {
+                echo json_encode(array("success"=>true, "message"=>"location not found"));
+            }
+        }
+        else
+        {
+            echo json_encode(array("success"=>true, "message"=>"verification successful"));
         }
     }
 ?>

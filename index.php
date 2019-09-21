@@ -100,9 +100,18 @@ else if (isset($_POST["game"]) && isset($_POST["time"]) && isset($_POST["locatio
         {
             if (($dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $time)) !== FALSE)
             {
+                /*
+
+                !!! Can't echo before <html lang="en"> !!!
+
+                echo "index.php";
                 echo $game;
                 echo $username;
                 echo $email;
+                echo $location;
+                echo $timestamp;
+                echo $dateTime;
+                /**/
             }
         }
     }
