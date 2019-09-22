@@ -109,8 +109,18 @@
 
                                     $subject = "Reservation ".$dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)");
 
+                                    $openstreetmap = "http://www.openstreetmap.org/?mlat=".$location['marker'][0]."&mlon=".$location['marker'][1]."&zoom=14";
+
+                                    $googleMaps = "https://www.google.com/maps/search/?api=1&query=".$location['marker'][0].",".$location['marker'][1];
+
                                     //$message = "Game: ". json_encode($game) ." \n User: $username \n Email: $emailFrom \n Location: ". json_encode($location) ." \n Unix timestamp: $timestamp \n UTC Date: $time \n Date: " . $dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)");
-                                    $message = "User: $username"."\n"."Email: $emailFrom"."\n"."Game: ".$games."\n"."Date: ".$dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)")."\n"."Location: ".json_encode($location);
+                                    $message = "User: $username"."\n".
+                                                "Email: $emailFrom"."\n".
+                                                "Game: ".$games."\n".
+                                                "Date: ".$dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)")."\n".
+                                                "Location: ".$location['address']." ".$location['marker'][0]." ".$location['marker'][1]."\n".
+                                                "Open Street Map: $openstreetmap"."\n".
+                                                "Google Maps: $googleMaps";
 
                                     $headers = "From: $emailFrom" . "\r\n" . "Reply-To: $emailFrom" . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
