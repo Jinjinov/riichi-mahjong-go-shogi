@@ -49,76 +49,113 @@
     }
     else if (isset($_SESSION['initialized']))
     {
-        if (isset($_POST["game"]) && isset($_POST["time"]) && isset($_POST["location"]) && isset($_POST["username"]) && isset($_POST["email"]))
-        {
-            $game = $_POST["game"];
-            $time = $_POST["time"];
-            //$id = $_POST["location"];
-            $index = $_POST["location"];
-            $username = $_POST["username"];
-            $emailFrom = $_POST["email"];
+        //$ids = $_SESSION['ids'];
+        $locations = $_SESSION['locations'];
 
-            if($adapters)
+        if($adapters)
+        {
+            $username = "notConnected";
+            $emailFrom = "notConnected";
+
+            foreach ($adapters as $name => $adapter)
             {
-                foreach ($adapters as $name => $adapter)
+                if($adapter->isConnected())
                 {
-                    if($adapter->isConnected())
-                    {
-                        $username = $adapter->getUserProfile()->displayName;
-                        $emailFrom = $adapter->getUserProfile()->email;
-                    }
+                    $username = $adapter->getUserProfile()->displayName;
+                    $emailFrom = $adapter->getUserProfile()->email;
                 }
             }
 
-            //$ids = $_SESSION['ids'];
-            $locations = $_SESSION['locations'];
-
-            //if(array_key_exists($id, $ids))
-            if(array_key_exists($index, $locations))
+            if (isset($_POST["game"]) && isset($_POST["time"]) && isset($_POST["location"])) // && isset($_POST["username"]) && isset($_POST["email"]))
             {
-                //$location = $ids[$id];
-                $location = $locations[$index];
+                $game = $_POST["game"];
+                $time = $_POST["time"];
+                //$id = $_POST["location"];
+                $index = $_POST["location"];
+                //$username = $_POST["username"];
+                //$emailFrom = $_POST["email"];
 
-                if (($timestamp = strtotime($time)) !== false)
+                //if(array_key_exists($id, $ids))
+                if(array_key_exists($index, $locations))
                 {
-                    if (($dateTime = DateTime::createFromFormat("Y-m-d\TH:i:s.uP", $time)) !== FALSE)
+                    //$location = $ids[$id];
+                    $location = $locations[$index];
+
+                    $gameCount = count($game);
+                    if($gameCount > 0 && $gameCount <= 3)
                     {
-                        $dateTime->setTimezone(new DateTimeZone('Europe/Ljubljana'));
-
-                        $subject = "Reservation ".$dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)");
-
-                        //$message = "Game: ". json_encode($game) ." \n User: $username \n Email: $emailFrom \n Location: ". json_encode($location) ." \n Unix timestamp: $timestamp \n UTC Date: $time \n Date: " . $dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)");
-                        $message = "User: $username"."\n"."Email: $emailFrom"."\n"."Game: ".json_encode($game)."\n"."Date: ".$dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)")."\n"."Location: ".json_encode($location);
-
-                        $headers = "From: $emailFrom" . "\r\n" . "Reply-To: $emailFrom" . "\r\n" . 'X-Mailer: PHP/' . phpversion();
-
-                        if (mail($emailTo, $subject, $message /*, $headers,"-f $emailFrom" */) !== false)
+                        $isValidGame = true;
+                        foreach($game as $validGame)
                         {
-                            echo json_encode(array("success"=>true, "message"=>$message));
+                            if(strcmp($validGame, "Mahjong") && strcmp($validGame, "Go") && strcmp($validGame, "Shogi"))
+                            {
+                                $isValidGame = false;
+                            }
+                        }
+
+                        if($isValidGame)
+                        {
+                            $games = $game[0];
+                            for($i = 1; $i < $gameCount; ++$i)
+                            {
+                                $games = $games . ", " . $game[$i];
+                            }
+
+                            if (($timestamp = strtotime($time)) !== false)
+                            {
+                                if (($dateTime = DateTime::createFromFormat("Y-m-d\TH:i:s.uP", $time)) !== FALSE)
+                                {
+                                    $dateTime->setTimezone(new DateTimeZone('Europe/Ljubljana'));
+
+                                    $subject = "Reservation ".$dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)");
+
+                                    //$message = "Game: ". json_encode($game) ." \n User: $username \n Email: $emailFrom \n Location: ". json_encode($location) ." \n Unix timestamp: $timestamp \n UTC Date: $time \n Date: " . $dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)");
+                                    $message = "User: $username"."\n"."Email: $emailFrom"."\n"."Game: ".$games."\n"."Date: ".$dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)")."\n"."Location: ".json_encode($location);
+
+                                    $headers = "From: $emailFrom" . "\r\n" . "Reply-To: $emailFrom" . "\r\n" . 'X-Mailer: PHP/' . phpversion();
+
+                                    if (mail($emailTo, $subject, $message /*, $headers,"-f $emailFrom" */) !== false)
+                                    {
+                                        echo json_encode(array("success"=>true, "message"=>$message));
+                                    }
+                                    else
+                                    {
+                                        echo json_encode(array("success"=>false, "message"=>"mail not sent $message"));
+                                    }
+                                }
+                                else
+                                {
+                                    echo json_encode(array("success"=>false, "message"=>"invalid date $time timestamp $timestamp"));
+                                }
+                            }
+                            else
+                            {
+                                echo json_encode(array("success"=>false, "message"=>"invalid time $time"));
+                            }
                         }
                         else
                         {
-                            echo json_encode(array("success"=>false, "message"=>"mail not sent $message"));
+                            echo json_encode(array("success"=>false, "message"=>"invalid games ".json_encode($game)));
                         }
                     }
                     else
                     {
-                        echo json_encode(array("success"=>false, "message"=>"invalid date $time timestamp $timestamp "));
+                        echo json_encode(array("success"=>false, "message"=>"invalid game count $gameCount"));
                     }
                 }
                 else
                 {
-                    echo json_encode(array("success"=>false, "message"=>"invalid time $time"));
+                    echo json_encode(array("success"=>false, "message"=>"location $id not found"));
                 }
             }
             else
             {
-                echo json_encode(array("success"=>false, "message"=>"location $id not found"));
+                echo json_encode(array("success"=>false, "message"=>"game, time, location not found"));
             }
         }
         else
         {
-            echo json_encode(array("success"=>false, "message"=>"initialized"));
+            echo json_encode(array("success"=>false, "message"=>"not signed in"));
         }
     }
     else

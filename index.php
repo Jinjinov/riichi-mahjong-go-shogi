@@ -77,22 +77,6 @@ function getLocations()
 
 function initialize()
 {
-  /*
-  if (isset($_SESSION['initialized']))
-  {
-    echo 'alert("already initialized"); ';
-
-    if (isset($_SESSION['locations']))
-    {
-      $ids = $_SESSION['ids'];
-      $locations = $_SESSION['locations'];
-      $msg = count($locations);
-
-      echo "alert('Locations: $msg !'); ";
-    }
-  }
-  else
-  /**/
   if (!isset($_SESSION['initialized']))
   {
     $_SESSION['initialized'] = true;
@@ -100,37 +84,6 @@ function initialize()
     getLocations();
 
     //echo 'alert("initialized")';
-  }
-  else if (isset($_POST["game"]) && isset($_POST["time"]) && isset($_POST["location"]) && isset($_POST["username"]) && isset($_POST["email"]))
-  {
-      $game = $_POST["game"];
-      $time = $_POST["time"];
-      //$id = $_POST["location"];
-      $index = $_POST["location"];
-      $username = $_POST["username"];
-      $email = $_POST["email"];
-
-      //$ids = $_SESSION['ids'];
-      $locations = $_SESSION['locations'];
-
-      //if(array_key_exists($id, $ids))
-      if(array_key_exists($index, $locations))
-      {
-          //$location = $ids[$id];
-          $location = $locations[$index];
-
-          if (($timestamp = strtotime($time)) !== false)
-          {
-              if (($dateTime = DateTime::createFromFormat("Y-m-d\TH:i:s.uP", $time)) !== FALSE)
-              {
-                $message = "Game: $game \n User: $username \n Email: $email \n Location: $location \n Time: $timestamp \n Date: $time " . $dateTime->format("Y-m-d H:i:s");
-
-                mail($email, "Reservation", $message);
-
-                echo "alert(' $message ')";
-              }
-          }
-      }
   }
 }
 
@@ -367,6 +320,20 @@ function initialize()
         <button v-if="signedIn" id="sign-out" v-on:click="signOut()">Sign out: {{userName}}</button>
         -->
 
+        <script>
+        function formatDate(date) {
+          var day = date.getDate();
+          day = day < 10 ? ' ' + day : day;
+          var month = date.getMonth() + 1;
+          month = month < 10 ? '0' + month : month;
+          var hours = date.getHours();
+          hours = hours < 10 ? ' ' + hours : hours;
+          var minutes = date.getMinutes();
+          minutes = minutes < 10 ? '0' + minutes : minutes;
+          return day + "." + month + "." + date.getFullYear() + " " + hours + ':' + minutes;
+        }
+        </script>
+
         <h2>5.) Confirm:</h2>
 
         <?php if ($adapters) : ?>
@@ -383,10 +350,10 @@ function initialize()
         <?php endif; ?>
 
         <p v-if="checkedGames.length == 0">You have to choose a game!</p>
-        <p v-if="checkedGames.length != 0">Games: {{checkedGames}}</p>
+        <p v-if="checkedGames.length != 0">Game:<span v-for="game in checkedGames"> {{game}}</span></p>
 
         <p v-if="dateTime == ''">You have to choose a date!</p>
-        <p v-if="dateTime != ''">Date: {{dateTime}}</p>
+        <p v-if="dateTime != ''">Date: {{formatDate(new Date(dateTime))}}</p>
 
         <p v-if="locationIndex == -1">You have to choose a location!</p>
         <p v-if="locationIndex != -1">Location: {{locations[locationIndex].address}}</p>
