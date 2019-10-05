@@ -222,6 +222,14 @@ function initialize()
         <div class="wikipedia">Play <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Go_(game)">Go</a> in <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Ljubljana">Ljubljana, Slovenia</a></div>
         <div class="wikipedia">Play <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Shogi">Shogi</a> in <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Ljubljana">Ljubljana, Slovenia</a></div>
 
+        <h2>About me</h2>
+
+        <div class="game">Hi, there! My name is Urban and I am a fan of table top games played in Japan:</div>
+        <div class="game">- <a href="mahjong.html">Mahjong</a></div>
+        <div class="game">- <a href="go.html">Go</a></div>
+        <div class="game">- <a href="shogi.html">Shogi</a></div>
+        <div class="game">If you would like to play any of these games, but don't have anyone to play with (or you are interested in learning how to play), you can choose a date and place and I will reply to you.</div>
+
         <h2>1.) Sign in:</h2>
 
         <div style="font-size: 12pt;">
@@ -262,20 +270,25 @@ function initialize()
           <input type="checkbox" id="shogi" value="Shogi" v-model="checkedGames">
           <label for="shogi">Shogi</label>
         </div>
-<!--
+
+        <!--
         <div>
           <span>to play:</span>
           <span v-for="game in checkedGames"> {{game}}</span>
         </div>
--->
-        <h2>3.) Pick a date:</h2>
+        -->
+        
+        <h2>3.) Pick date and time:</h2>
 
-        <div>
-          <!--
-          <vue-ctk-date-time-picker ref="picker" label="Pick a date!" v-model="dateTime" range></vue-ctk-date-time-picker>
-          -->
-          <datetime ref="picker" type="datetime" v-model="dateTime" input-id="datetime" ></datetime>
-        </div>
+        <div class="game">Date:</div>
+        <datetime ref="picker" type="date" v-model="dateTime" input-id="datetime" ></datetime>
+
+        <!--
+        <vue-ctk-date-time-picker ref="picker" label="Pick a date!" v-model="dateTime" range></vue-ctk-date-time-picker>
+        -->
+
+        <div class="game">Time:</div>
+        <datetime ref="picker" type="time" v-model="dateTime" input-id="datetime" ></datetime>
 
         <h2>4.) Pick a location:</h2>
 
@@ -346,20 +359,19 @@ function initialize()
             :sitekey="sitekey">
           </vue-recaptcha>
         <?php else: ?>
-          <p>You have to sign in!</p>
+          <div class="game">You have to sign in!</div>
         <?php endif; ?>
 
-        <p v-if="checkedGames.length == 0">You have to choose a game!</p>
-        <p v-if="checkedGames.length != 0">Game:<span v-for="game in checkedGames"> {{game}}</span></p>
+        <div class="game" v-if="checkedGames.length == 0">You have to choose a game!</div>
+        <div class="game" v-if="checkedGames.length != 0">Game:<span v-for="game in checkedGames"> {{game}}</span></div>
 
-        <p v-if="dateTime == ''">You have to choose a date!</p>
-        <p v-if="dateTime != ''">Date: {{formatDate(new Date(dateTime))}}</p>
+        <div class="game" v-if="dateTime == ''">You have to choose a date!</div>
+        <div class="game" v-if="dateTime != ''">Date: {{formatDate(new Date(dateTime))}}</div>
 
-        <p v-if="locationIndex == -1">You have to choose a location!</p>
-        <p v-if="locationIndex != -1">Location: {{locations[locationIndex].address}}</p>
+        <div class="game" v-if="locationIndex == -1">You have to choose a location!</div>
+        <div class="game" v-if="locationIndex != -1">Location: {{locations[locationIndex].address}}</div>
 
         <!--
-        <br>
         <button @click="resetRecaptcha"> Reset ReCAPTCHA </button>
         -->
       </div>
