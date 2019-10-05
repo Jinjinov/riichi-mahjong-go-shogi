@@ -9,6 +9,10 @@ var vm = new Vue({
   el: '#app',
   data: {
     dateTime: null,
+    minDatetime: null,
+    maxDatetime: null,
+    minHourUTC: ["T08:00:00.000Z", "T14:00:00.000Z", "T17:00:00.000Z", "T14:00:00.000Z", "T17:00:00.000Z", "T14:00:00.000Z", "T08:00:00.000Z"],
+    maxHourUTC: ["T20:00:00.000Z", "T20:00:00.000Z", "T20:00:00.000Z", "T20:00:00.000Z", "T20:00:00.000Z", "T20:00:00.000Z", "T20:00:00.000Z"],
 
     zoom: 12,
     center: L.latLng(46.0712603, 14.5109068),
@@ -71,6 +75,23 @@ var vm = new Vue({
     }
   },
   methods: {
+    dateSelected: function () {
+      var date = new Date(this.dateTime);
+
+      var month = date.getMonth() + 1;
+      month = month < 10 ? '0' + month : month;
+
+      var day = date.getDate();
+      day = day < 10 ? '0' + day : day;
+
+      var idx = date.getDay();
+
+      this.minDatetime = date.getFullYear() + '-' + month + '-' + day + this.minHourUTC[idx];
+      this.maxDatetime = date.getFullYear() + '-' + month + '-' + day + this.maxHourUTC[idx];
+
+      this.dateTime = this.dateTime.replace("T00:00:00.000Z", "T18:00:00.000Z");
+    },
+
     markerClick: function (index) {
       //if(this.locationIndex != -1) {
       //  this.locations[this.locationIndex].icon = this.defaultIcon;

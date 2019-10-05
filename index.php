@@ -281,14 +281,16 @@ function initialize()
         <h2>3.) Pick date and time:</h2>
 
         <div class="game">Date:</div>
-        <datetime ref="picker" type="date" v-model="dateTime" input-id="datetime" ></datetime>
+        <datetime ref="picker" type="date" v-model="dateTime" input-id="datetime" v-on:close="dateSelected" ></datetime>
 
         <!--
         <vue-ctk-date-time-picker ref="picker" label="Pick a date!" v-model="dateTime" range></vue-ctk-date-time-picker>
         -->
 
-        <div class="game">Time:</div>
-        <datetime ref="picker" type="time" v-model="dateTime" input-id="datetime" ></datetime>
+        <div v-if="dateTime != ''">
+          <div class="game">Time:</div>
+          <datetime ref="picker" type="time" v-model="dateTime" input-id="datetime" :min-datetime="minDatetime" :max-datetime="maxDatetime"></datetime>
+        </div>
 
         <h2>4.) Pick a location:</h2>
 
