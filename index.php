@@ -218,9 +218,13 @@ function initialize()
       <img src="icon128x128.png" alt="logo">
       
       <div id="inner">
+        <h1>Riichi mahjong, Go, Shogi</h1>
+
+        <!--
         <div class="wikipedia">Play <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Japanese_Mahjong">Mahjong</a> in <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Ljubljana">Ljubljana, Slovenia</a></div>
         <div class="wikipedia">Play <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Go_(game)">Go</a> in <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Ljubljana">Ljubljana, Slovenia</a></div>
         <div class="wikipedia">Play <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Shogi">Shogi</a> in <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Ljubljana">Ljubljana, Slovenia</a></div>
+        -->
 
         <h2>About me</h2>
 
