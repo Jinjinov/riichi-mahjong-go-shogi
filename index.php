@@ -162,7 +162,7 @@ function initialize()
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Roboto Mono">
+    <link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Roboto|Roboto Mono">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.css">
     <link rel="stylesheet" href="index.css?v=0.1" type="text/css"/>
     <!--
@@ -228,11 +228,13 @@ function initialize()
 
         <h2>About me</h2>
 
-        <div class="game">Hi, there! My name is Urban and I am a fan of table top games played in Japan:</div>
-        <div class="game">- <a href="mahjong.html">Mahjong</a></div>
-        <div class="game">- <a href="go.html">Go</a></div>
-        <div class="game">- <a href="shogi.html">Shogi</a></div>
-        <div class="game">If you would like to play any of these games, but don't have anyone to play with (or you are interested in learning how to play), you can choose a date and place and I will reply to you.</div>
+        <div class="left">Hi, there! My name is Urban and I am a fan of table top games played in Japan:</div>
+        <div class="columns">
+          <div class="column"><a href="mahjong.html"><img src="mahjong.jpg" alt="mahjong"></a><a href="mahjong.html">Mahjong</a></div>
+          <div class="column"><a href="go.html"><img src="go.jpg" alt="go"></a><a href="go.html">Go</a></div>
+          <div class="column"><a href="shogi.html"><img src="shogi.jpg" alt="shogi"></a><a href="shogi.html">Shogi</a></div>
+        </div>
+        <div class="left">If you would like to play any of these games, but don't have anyone to play with (or you are interested in learning how to play), you can choose a date and place and I will reply to you.</div>
 
         <h2>1.) Sign in:</h2>
 
@@ -261,18 +263,22 @@ function initialize()
 
         <h2>2.) Select a game:</h2>
 
-        <div class="game">I want to play:</div>
-        <div class="game">
-          <input type="checkbox" id="mahjong" value="Mahjong" v-model="checkedGames">
-          <label for="mahjong">Mahjong</label>
-        </div>
-        <div class="game">
-          <input type="checkbox" id="go" value="Go" v-model="checkedGames">
-          <label for="go">Go</label>
-        </div>
-        <div class="game">
-          <input type="checkbox" id="shogi" value="Shogi" v-model="checkedGames">
-          <label for="shogi">Shogi</label>
+        <div class="columns">
+          <div class="column">
+            <label for="mahjong"><img src="mahjong.jpg" alt="mahjong"></label>
+            <input type="checkbox" id="mahjong" value="Mahjong" v-model="checkedGames">
+            <label for="mahjong">Mahjong</label>
+          </div>
+          <div class="column">
+            <label for="go"><img src="go.jpg" alt="go"></label>
+            <input type="checkbox" id="go" value="Go" v-model="checkedGames">
+            <label for="go">Go</label>
+          </div>
+          <div class="column">
+            <label for="shogi"><img src="shogi.jpg" alt="shogi"></label>
+            <input type="checkbox" id="shogi" value="Shogi" v-model="checkedGames">
+            <label for="shogi">Shogi</label>
+          </div>
         </div>
 
         <!--
@@ -282,9 +288,9 @@ function initialize()
         </div>
         -->
         
-        <h2>3.) Pick date and time:</h2>
+        <h2>3.) Pick a date and time:</h2>
 
-        <div class="game">Date:</div>
+        <div class="center">Date:</div>
         <datetime ref="picker" type="date" v-model="dateTime" input-id="datetime" v-on:close="dateSelected" ></datetime>
 
         <!--
@@ -292,7 +298,7 @@ function initialize()
         -->
 
         <div v-if="dateTime != ''">
-          <div class="game">Time:</div>
+          <div class="center">Time:</div>
           <datetime ref="picker" type="time" v-model="dateTime" input-id="datetime" :min-datetime="minDatetime" :max-datetime="maxDatetime"></datetime>
         </div>
 
@@ -365,17 +371,17 @@ function initialize()
             :sitekey="sitekey">
           </vue-recaptcha>
         <?php else: ?>
-          <div class="game">You have to sign in!</div>
+          <div class="center">You have to sign in!</div>
         <?php endif; ?>
 
-        <div class="game" v-if="checkedGames.length == 0">You have to choose a game!</div>
-        <div class="game" v-if="checkedGames.length != 0">Game:<span v-for="game in checkedGames"> {{game}}</span></div>
+        <div class="center" v-if="checkedGames.length == 0">You have to choose a game!</div>
+        <div class="center" v-if="checkedGames.length != 0">Game:<span v-for="game in checkedGames"> {{game}}</span></div>
 
-        <div class="game" v-if="dateTime == ''">You have to choose a date!</div>
-        <div class="game" v-if="dateTime != ''">Date: {{formatDate(new Date(dateTime))}}</div>
+        <div class="center" v-if="dateTime == ''">You have to choose a date!</div>
+        <div class="center" v-if="dateTime != ''">Date: {{formatDate(new Date(dateTime))}}</div>
 
-        <div class="game" v-if="locationIndex == -1">You have to choose a location!</div>
-        <div class="game" v-if="locationIndex != -1">Location: {{locations[locationIndex].address}}</div>
+        <div class="center" v-if="locationIndex == -1">You have to choose a location!</div>
+        <div class="center" v-if="locationIndex != -1">Location: {{locations[locationIndex].address}}</div>
 
         <!--
         <button @click="resetRecaptcha"> Reset ReCAPTCHA </button>
