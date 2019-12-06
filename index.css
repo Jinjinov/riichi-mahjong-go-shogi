@@ -58,6 +58,13 @@ img {
     margin: 10px;
 }
 
+.friend {
+    display: block;
+    margin: 10px;
+    width: calc(100% - 20px);
+    max-width: 340px;
+}
+
 #app {
     text-align: center;
 }
@@ -81,7 +88,7 @@ img {
 
 .Google {
     display: inline-block;
-    width: 100%;
+    width: calc(100% - 10px);
     max-width: 340px;
     text-align: center;
 
@@ -97,7 +104,7 @@ img {
 
 .Facebook {
     display: inline-block;
-    width: 100%;
+    width: calc(100% - 10px);
     max-width: 340px;
     text-align: center;
 

@@ -266,19 +266,26 @@ function initialize()
         <div class="columns">
           <div class="column">
             <label for="mahjong"><img src="mahjong.jpg" alt="mahjong"></label>
-            <input type="checkbox" id="mahjong" value="Mahjong" v-model="checkedGames">
-            <label for="mahjong">Mahjong</label>
+            <input name="game" type="radio" id="mahjong" value="Mahjong" v-model="checkedGames">
+            <label for="mahjong">Mahjong<br/>(4 players)</label>
           </div>
           <div class="column">
             <label for="go"><img src="go.jpg" alt="go"></label>
-            <input type="checkbox" id="go" value="Go" v-model="checkedGames">
-            <label for="go">Go</label>
+            <input name="game" type="radio" id="go" value="Go" v-model="checkedGames">
+            <label for="go">Go<br/>(2 players)</label>
           </div>
           <div class="column">
             <label for="shogi"><img src="shogi.jpg" alt="shogi"></label>
-            <input type="checkbox" id="shogi" value="Shogi" v-model="checkedGames">
-            <label for="shogi">Shogi</label>
+            <input name="game" type="radio" id="shogi" value="Shogi" v-model="checkedGames">
+            <label for="shogi">Shogi<br/>(2 players)</label>
           </div>
+        </div>
+
+        <div v-if="checkedGames.includes('Mahjong')">
+          <div class="left">Mahjong is a 4 player game.</div>
+          <div class="left">Please name 2 friends who will join you:</div>
+          <input name="friend" v-model="friend1" maxlength="12" placeholder="First name" class="friend">
+          <input name="friend" v-model="friend2" maxlength="12" placeholder="First name" class="friend">
         </div>
 
         <!--
@@ -363,7 +370,7 @@ function initialize()
 
         <?php if ($adapters) : ?>
           <vue-recaptcha
-            v-if="checkedGames.length != 0 && dateTime != '' && locationIndex != -1"
+            v-if="showRecaptcha"
             style="display: inline-block; padding: 10px"
             ref="recaptcha"
             @verify="onVerify"
@@ -376,6 +383,11 @@ function initialize()
 
         <div class="center" v-if="checkedGames.length == 0">You have to choose a game!</div>
         <div class="center" v-if="checkedGames.length != 0">Game:<span v-for="game in checkedGames"> {{game}}</span></div>
+
+        <div v-if="checkedGames.includes('Mahjong')">
+          <div class="center" v-if="friend1 == '' || friend2 == ''">Name two friends who will join you!</div>
+          <div class="center" v-if="friend1 != '' && friend2 != ''">Two friends who will join you:<br/>{{friend1}} and {{friend2}}</div>
+        </div>
 
         <div class="center" v-if="dateTime == ''">You have to choose a date!</div>
         <div class="center" v-if="dateTime != ''">Date: {{formatDate(new Date(dateTime))}}</div>

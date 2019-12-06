@@ -47,6 +47,9 @@ var vm = new Vue({
 
     checkedGames: [],
 
+    friend1: "",
+    friend2: "",
+
     googleSignInParams: {
       client_id: '633407910434-th0re56p064dbn05m3iiv96v83ftnk7n.apps.googleusercontent.com'
     },
@@ -62,6 +65,17 @@ var vm = new Vue({
     userImageUrl: '',
 
     signedIn: false,
+  },
+  computed: {
+    showRecaptcha: function () {
+      var ok = this.checkedGames.length != 0 && this.dateTime != '' && this.locationIndex != -1;
+
+      if(this.checkedGames.includes('Mahjong')) {
+        return ok && this.friend1 != '' && this.friend2 != '';
+      }
+
+      return ok;
+    }
   },
   components: {
     'vue-recaptcha': VueRecaptcha
