@@ -382,7 +382,7 @@ function initialize()
         <?php endif; ?>
 
         <div class="center" v-if="checkedGames.length == 0">You have to choose a game!</div>
-        <div class="center" v-if="checkedGames.length != 0">Game: {{game}}</div>
+        <div class="center" v-if="checkedGames.length != 0">Game: {{checkedGames}}</div>
 
         <div v-if="checkedGames.includes('Mahjong')">
           <div class="center" v-if="friend1 == '' || friend2 == ''">Name two friends who will join you!</div>
