@@ -91,6 +91,16 @@
                             {
                                 $isValidGame = false;
                             }
+
+                            if(strlen($validGame) != 7 && strlen($validGame) != 2 && strlen($validGame) != 5)
+                            {
+                                $isValidGame = false;
+                            }
+
+                            if(!is_string($validGame))
+                            {
+                                $isValidGame = false;
+                            }
                         }
 
                         if($isValidGame)
