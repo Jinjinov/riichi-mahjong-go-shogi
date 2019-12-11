@@ -83,9 +83,11 @@ var vm = new Vue({
   watch: {
     locationIndex: function (newLocation, oldLocation) {
       if(oldLocation != -1) {
-        this.locations[oldLocation].icon = this.defaultIcon;
+        //this.locations[oldLocation].icon = this.defaultIcon;
+        this.ids[oldLocation].icon = this.defaultIcon;
       }
-      this.locations[newLocation].icon = this.selectedIcon;
+      //this.locations[newLocation].icon = this.selectedIcon;
+      this.ids[newLocation].icon = this.selectedIcon;
     }
   },
   methods: {
@@ -254,11 +256,13 @@ var vm = new Vue({
             if(element.lat != null && element.lon != null) {
               var locationNode = { id: element.id, address: name, marker: L.latLng(element.lat, element.lon) }
               this.locations.push(locationNode);
+              this.ids[element.id] = locationNode;
             }
             else {
               if(element.center.lat != null && element.center.lon != null) {
                 var locationWay = { id: element.id, address: name, marker: L.latLng(element.center.lat, element.center.lon) }
                 this.locations.push(locationWay);
+                this.ids[element.id] = locationWay;
               }
             }
           }

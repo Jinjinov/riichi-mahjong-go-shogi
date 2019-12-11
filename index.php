@@ -393,7 +393,7 @@ function initialize()
         <div class="center" v-if="dateTime != ''">Date: {{formatDate(new Date(dateTime))}}</div>
 
         <div class="center" v-if="locationIndex == -1">You have to choose a location!</div>
-        <div class="center" v-if="locationIndex != -1">Location: {{locations[locationIndex].address}}</div>
+        <div class="center" v-if="locationIndex != -1">Location: {{ids[locationIndex].address}}</div>
 
         <!--
         <button @click="resetRecaptcha"> Reset ReCAPTCHA </button>
