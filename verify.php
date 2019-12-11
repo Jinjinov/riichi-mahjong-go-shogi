@@ -81,9 +81,11 @@
                     //$location = $ids[$id];
                     $location = $locations[$index];
 
+                    /*
                     $gameCount = count($game);
                     if($gameCount > 0 && $gameCount <= 3)
                     {
+                    /**/    
                         $isValidGame = true;
                         foreach($game as $validGame)
                         {
@@ -105,11 +107,13 @@
 
                         if($isValidGame)
                         {
+                            /*
                             $games = $game[0];
                             for($i = 1; $i < $gameCount; ++$i)
                             {
                                 $games = $games . ", " . $game[$i];
                             }
+                            /**/
 
                             if (($timestamp = strtotime($time)) !== false)
                             {
@@ -126,7 +130,7 @@
                                     //$message = "Game: ". json_encode($game) ." \n User: $username \n Email: $emailFrom \n Location: ". json_encode($location) ." \n Unix timestamp: $timestamp \n UTC Date: $time \n Date: " . $dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)");
                                     $message = "User: $username"."\n".
                                                 "Email: $emailFrom"."\n".
-                                                "Game: ".$games."\n".
+                                                "Game: ".$game."\n".
                                                 "Date: ".$dateTime->format("Y-m-d H:i:s T \(\G\M\T P\)")."\n".
                                                 "Location: ".$location['address']." ".$location['marker'][0]." ".$location['marker'][1]."\n".
                                                 "Open Street Map: $openstreetmap"."\n".
@@ -157,11 +161,13 @@
                         {
                             echo json_encode(array("success"=>false, "message"=>"invalid games ".json_encode($game)));
                         }
+                    /*    
                     }
                     else
                     {
                         echo json_encode(array("success"=>false, "message"=>"invalid game count $gameCount"));
                     }
+                    /**/
                 }
                 else
                 {
