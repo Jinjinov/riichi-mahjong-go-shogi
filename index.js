@@ -252,12 +252,12 @@ var vm = new Vue({
             }
 
             if(element.lat != null && element.lon != null) {
-              var locationNode = { address: name, marker: L.latLng(element.lat, element.lon) }
+              var locationNode = { id: element.id, address: name, marker: L.latLng(element.lat, element.lon) }
               this.locations.push(locationNode);
             }
             else {
               if(element.center.lat != null && element.center.lon != null) {
-                var locationWay = { address: name, marker: L.latLng(element.center.lat, element.center.lon) }
+                var locationWay = { id: element.id, address: name, marker: L.latLng(element.center.lat, element.center.lon) }
                 this.locations.push(locationWay);
               }
             }

@@ -312,14 +312,14 @@ function initialize()
         <h2>4.) Pick a location:</h2>
 
         <select v-model="locationIndex" id="location">
-          <option v-for="(location, index) in locations" v-bind:value="index">{{ location.address }}</option>
+          <option v-for="(location, index) in locations" v-bind:value="location.id">{{ location.address }}</option>
         </select>
 
         <template>
           <l-map :zoom="zoom" :center="center" style="height: 500px;" ref="map">
             <l-tile-layer :url="url"></l-tile-layer>
             <template v-for="(location, index) in locations">
-              <l-marker :lat-lng="location.marker" v-on:click="markerClick(index)" :icon="location.icon">
+              <l-marker :lat-lng="location.marker" v-on:click="markerClick(location.id)" :icon="location.icon">
                 <v-popup :content="location.address"></v-popup>
               </l-marker>
             </template>

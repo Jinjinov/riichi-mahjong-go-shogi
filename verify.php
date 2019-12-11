@@ -49,8 +49,8 @@
     }
     else if (isset($_SESSION['initialized']))
     {
-        //$ids = $_SESSION['ids'];
-        $locations = $_SESSION['locations'];
+        $ids = $_SESSION['ids'];
+        //$locations = $_SESSION['locations'];
 
         if($adapters)
         {
@@ -70,16 +70,16 @@
             {
                 $game = $_POST["game"];
                 $time = $_POST["time"];
-                //$id = $_POST["location"];
-                $index = $_POST["location"];
+                $id = $_POST["location"];
+                //$index = $_POST["location"];
                 //$username = $_POST["username"];
                 //$emailFrom = $_POST["email"];
 
-                //if(array_key_exists($id, $ids))
-                if(array_key_exists($index, $locations))
+                if(array_key_exists($id, $ids))
+                //if(array_key_exists($index, $locations))
                 {
-                    //$location = $ids[$id];
-                    $location = $locations[$index];
+                    $location = $ids[$id];
+                    //$location = $locations[$index];
 
                     /*
                     $gameCount = count($game);
